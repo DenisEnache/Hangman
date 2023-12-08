@@ -5,10 +5,16 @@ const alphabet = document.getElementById("alphabet");
 const wordContainer = document.getElementById("word-container");
 const gameStatus = document.getElementById("gameStatus");
 
-let randomPos = Math.floor(Math.random() * wordsList.length);
-let randomWord  = wordsList[randomPos];
+let randomWord;
 let lifeNr = 7;
 let guessedLetNr = 0;
+
+function random() {
+    const randomPos = Math.floor(Math.random() * wordsList.length);
+    randomWord = wordsList[randomPos];
+}
+
+random();
 
 function wordLines() {
     for (let i = 0; i < randomWord.length; ++i) {
@@ -32,15 +38,19 @@ function replaceLine(index, letter) {
 function letters() {
     for(let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); ++i) {
         const letterButton = document.createElement("button");
+        let guessedLetters = [];
         letterButton.textContent = String.fromCharCode(i);
         letterButton.classList.add("btn-primary", "btn-lg", "p-3", "m-3");
         letterButton.addEventListener("click", function() {
             let life = false;
             for (let j = 0; j < randomWord.length && lifeNr > 0; ++j) {
                 if (String.fromCharCode(i) == randomWord[j]) {
-                    replaceLine(j, String.fromCharCode(i));
                     life = true;
+                }
+                if (String.fromCharCode(i) == randomWord[j] && !guessedLetters.includes(String.fromCharCode(i))) {
+                    replaceLine(j, String.fromCharCode(i));
                     ++guessedLetNr;
+                    guessedLetters.push(String.fromCharCode(i));
                 }
             }
             if (life == false && lifeNr > 0 && guessedLetNr < randomWord.length) {
