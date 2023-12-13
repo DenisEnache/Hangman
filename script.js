@@ -1,5 +1,5 @@
-var wordsList = ["MAJOR", "TIME", "PATIENT", "KINDNESS", "DOCTOR", "LIFE", "SLENDERING", 
-"IMPERSONATION", "ENCOMPASS", "BUTTER", "FOOTBALL", "SIMPLICITY", "MISTERY", "NEGOCIABLE"];
+let wordsList = ["MAJOR", "TIME", "PATIENT", "KINDNESS", "DOCTOR", "LIFE", "SLENDERING", 
+    "IMPERSONATION", "ENCOMPASS", "BUTTER", "FOOTBALL", "SIMPLICITY", "MISTERY", "NEGOCIABLE"];
 
 const alphabet = document.getElementById("alphabet");
 const wordContainer = document.getElementById("word-container");
@@ -7,7 +7,6 @@ const gameStatus = document.getElementById("gameStatus");
 
 let randomWord;
 let lifeNr = 7;
-let guessedLetNr = 0;
 
 function random() {
     const randomPos = Math.floor(Math.random() * wordsList.length);
@@ -35,38 +34,49 @@ function replaceLine(index, letter) {
     }
 }
 
-function letters() {
+function letterButtons() {
     for(let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); ++i) {
         const letterButton = document.createElement("button");
-        let guessedLetters = [];
         letterButton.textContent = String.fromCharCode(i);
         letterButton.classList.add("btn-primary", "btn-lg", "p-3", "m-3");
         letterButton.addEventListener("click", function() {
-            let life = false;
-            for (let j = 0; j < randomWord.length && lifeNr > 0; ++j) {
-                if (String.fromCharCode(i) == randomWord[j]) {
-                    life = true;
-                }
-                if (String.fromCharCode(i) == randomWord[j] && !guessedLetters.includes(String.fromCharCode(i))) {
-                    replaceLine(j, String.fromCharCode(i));
-                    ++guessedLetNr;
-                    guessedLetters.push(String.fromCharCode(i));
-                }
-            }
-            if (life == false && lifeNr > 0 && guessedLetNr < randomWord.length) {
-                --lifeNr;
-                document.getElementById("lifeCount").textContent = lifeNr;
-            }
-            gameStatus.classList.add("game-status");
-            if (lifeNr == 0) {
-                gameStatus.textContent = "GAME OVER";
-            } else if (guessedLetNr == randomWord.length) {
-                gameStatus.textContent = "CONGRATULATIONS!";
-            }
+            checkGuessedLetters(String.fromCharCode(i));
         });
         alphabet.appendChild(letterButton);
     }
 }
 
-letters();
+function checkGuessedLetters(letter) {
+    let life = false;
+    for (let i = 0; i < randomWord.length && lifeNr > 0; ++i) {
+        if (letter == randomWord[i]) {
+            life = true;
+        }
+        if (letter == randomWord[i]) {
+            replaceLine(i, letter);
+        }
+    }
+    if (life == false && lifeNr > 0 && gameStatus.textContent == '') {
+        --lifeNr;
+        document.getElementById("lifeCount").textContent = lifeNr;
+    }
+    gameStatus.classList.add("game-status");
+    if (lifeNr == 0) {
+        gameStatus.textContent = "GAME OVER";
+    } else if (checkWinner()) {
+        gameStatus.textContent = "CONGRATULATIONS!";
+    }
+}    
+
+function checkWinner() {
+    let lines = document.querySelectorAll(".line");
+    for (let i = 0; i < lines.length; ++i) {
+        if (lines[i].textContent == " ") {
+            return false;
+        }
+    }
+    return true;
+}
+
+letterButtons();
 wordLines();
