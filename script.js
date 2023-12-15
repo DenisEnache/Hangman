@@ -1,5 +1,5 @@
 let wordsList = ["MAJOR", "TIME", "PATIENT", "KINDNESS", "DOCTOR", "LIFE", "SLENDERING", 
-    "IMPERSONATION", "ENCOMPASS", "BUTTER", "FOOTBALL", "SIMPLICITY", "MISTERY", "NEGOCIABLE"];
+    "IMPERSONATION", "ENCOMPASS", "BUTTER", "FOOTBALL", "SIMPLICITY", "MISTERY", "NEGOTIABLE"];
 
 const alphabet = document.getElementById("alphabet");
 const wordContainer = document.getElementById("word-container");
